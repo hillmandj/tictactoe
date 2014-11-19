@@ -30,7 +30,7 @@ class Game
     else
       comp_token = @player_one && @player_one.token == 'x' ? 'o' : 'x'
       comp_name = COMP_NAMES.sample
-      puts '', "You have been challenged by #{comp_name}! It's token is: #{comp_token}",''
+      puts '', "You have been challenged by #{comp_name}! Its token is: #{comp_token}",''
       Art::Images.robot
       player = Computer.new(comp_name, comp_token)
     end 

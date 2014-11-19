@@ -73,13 +73,11 @@ class GameState
   end
 
   def player_won?(token)
-    return @winner.token == token if @winner
-    false
+    @winner && @winner.token == token
   end
 
   def player_lost?(token)
-    return @winner.token != token if @winner
-    false
+    @winner && @winner.token != token
   end
 
   def win?
@@ -98,7 +96,6 @@ class GameState
     if win?
       @winner = @last_player
     end
-    @winner
   end
 
   def play
