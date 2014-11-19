@@ -3,13 +3,8 @@ class Player
 
   def initialize(name, token)
     @name = name
-    @token = token.downcase if valid_token?(token)
+    @token = token
     @value = @token.downcase.eql?('x') ? 1 : -1
-  end
-
-  def valid_token?(token)
-    raise 'Invalid token!' unless ['x', 'o'].include?(token.downcase)
-    true
   end
 end
 

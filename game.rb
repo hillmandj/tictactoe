@@ -2,28 +2,37 @@ require_relative 'lib/board'
 require_relative 'lib/player'
 require_relative 'lib/game_state'
 require_relative 'art/banners'
+require_relative 'art/images'
+
+COMP_NAMES = ['b0RG', 'd00mB0t', '3X3cut0r', 'G0v3n4t0R', 'Hingle McCringleberry', 'R2D2']
 
 class Game
   def initialize
     @board = Board.new(3)
     @player_one = get_player
     @player_two = get_player
-    @game_state = GameState.new(@player_one, @player_two, @board)
   end
 
   def get_player
     puts '','Please input a number to select the players type, 1: Human or 2: Computer',''
     option = gets.chomp.to_i
+
     unless [1,2].include?(option)
       puts '',"That is not a valid option!",''
       return get_player
     end
-    player_name = get_player_name
-    player_token = get_player_token
+
     if option == 1
+      player_name = get_player_name
+      player_token = get_player_token
+      puts '', "Welcome #{player_name}!", ''
       player = Human.new(player_name, player_token)
     else
-      player = Computer.new(player_name, player_token)
+      comp_token = @player_one && @player_one.token == 'x' ? 'o' : 'x'
+      comp_name = COMP_NAMES.sample
+      puts '', "You have been challenged by #{comp_name}! It's token is: #{comp_token}",''
+      Art::Images.robot
+      player = Computer.new(comp_name, comp_token)
     end 
     player
   end
@@ -37,22 +46,24 @@ class Game
     puts '','Please select a token for the player, x or o',''
     token = gets.chomp
     if !['x', 'o'].include?(token)
-      puts '',"#{token} is not a valid token!",''
+      puts '',"#{token} is not a valid token!"
       return get_player_token
     elsif @player_one && @player_one.token == token
-      puts '',"#{token} already taken!",''
+      puts '',"#{token} already taken!"
       return get_player_token
     end
     token
   end
 
   def play
-    @game_state.play
+    Art::Banners.game_on
+    game_state = GameState.new(@board, @player_one, @player_two)
+    game_state.play
   end
 end
 
 if __FILE__ == $0
-  Banners.intro_message
+  Art::Banners.intro_message
   Game.new.play
-  Banners.exit_message
+  Art::Banners.exit_message
 end

@@ -1,13 +1,13 @@
 class GameState
   attr_accessor :player_one, :player_two, :next_player, :last_player, :winner, :board
 
-  def initialize(player_one, player_two, board)
+  def initialize(board, player_one, player_two)
+    @board = board 
     @player_one = player_one 
     @player_two = player_two
     @next_player = @player_one
     @last_player = @player_two
     @value_to_token = value_to_token_hash
-    @board = board 
     @winner = nil
   end
 
@@ -43,9 +43,9 @@ class GameState
     new_state.player_one = @player_one.dup
     new_state.player_two = @player_two.dup
     new_state.board = Marshal.load(Marshal.dump(@board))
-    new_state.check_win
     new_state.board.set_piece(coords, new_state.next_player)
     new_state.switch_players
+    new_state.check_win
     new_state
   end
 
@@ -103,18 +103,14 @@ class GameState
 
   def play
     display_game
+
     until over?
       get_next_move(@next_player)
       check_win
       display_game
     end
 
-    if win?
-      puts "#{@winner.name} wins!"
-    end
-
-    if draw?
-      puts 'Aww shucks...game is a draw!'
-    end
+    puts '',"#{@winner.name} wins!",'' if win?
+    puts '','Aww shucks...game is a draw!','' if draw?
   end
 end
